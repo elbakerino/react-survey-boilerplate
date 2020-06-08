@@ -1,0 +1,38 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "dtslint/dtslint.json"
+    ],
+    "jsRules": {},
+    "rules": {
+        "deprecation": true,
+        "no-boolean-literal-compare": true,
+        "no-empty-interface": true,
+        "no-unnecessary-callback-wrapper": true,
+        "no-unnecessary-generics": true,
+        "indent": [
+            true,
+            "spaces",
+            4
+        ],
+        "trailing-comma": [
+            true,
+            {
+                "singleline": "never",
+                "multiline": {
+                    "objects": "ignore",
+                    "arrays": "ignore",
+                    "functions": "ignore",
+                    "typeLiterals": "never",
+                    "exports": "never",
+                    "imports": "never"
+                }
+            }
+        ],
+        "no-redundant-jsdoc": false,
+        "ban-types": false,
+        "semicolon": [
+            true
+        ]
+    }
+}

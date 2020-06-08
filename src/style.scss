@@ -1,0 +1,294 @@
+$primary-color: #6ab42a;
+$border-color: rgba($primary-color, 0.4);
+
+table {
+    //border: 1px solid $primary-color;
+    border-collapse: collapse;
+}
+
+tr {
+}
+
+td {
+    border: 1px solid $primary-color;
+    padding: 0;
+}
+
+thead {
+    th, td {
+        padding: 4px 0;
+        border: 0;
+    }
+}
+
+.q-- {
+    &label {
+        padding: 0 6px;
+        font-family: sans-serif;
+    }
+
+    &btn {
+        border: 0;
+        background: transparent;
+        padding: 6px;
+        width: 38px;
+        height: 38px;
+        color: $primary-color;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s linear;
+
+        &:hover {
+            background: rgba($primary-color, 0.1);
+        }
+
+        &:focus {
+            background: rgba($primary-color, 0.2);
+        }
+
+        &.active {
+            background: $primary-color;
+            color: #fff;
+        }
+    }
+
+    &input {
+        border: 1px solid $border-color;
+        background: transparent;
+        padding: 6px;
+        //width: 38px;
+        //height: 38px;
+        color: $primary-color;
+        font-size: 1rem;
+
+        &.active {
+            background: $primary-color;
+            color: #fff;
+        }
+
+        &-number {
+            display: flex;
+            //width: 100%;
+
+            &--control {
+                cursor: pointer;
+                border: 1px solid $border-color;
+                color: #fff;
+                padding: 0;
+
+                background: transparent center;
+                transition: background 0.3s;
+
+                &:hover {
+                    background: rgba($primary-color, 0.1) radial-gradient(circle, transparent 1%, rgba($primary-color, 0.1) 1%) center/15000%;
+                }
+
+                &:active {
+                    background: rgba($primary-color, 0.3);
+                    transition: background 0s;
+                    background-size: 100%;
+                }
+
+                svg {
+                    display: block;
+                    margin: 9px;
+                    fill: $primary-color;
+                    transition: fill 0.3s linear;
+                }
+
+                &--decrease {
+                    border-right: 0;
+                }
+
+                &--increase {
+                    border-left: 0;
+                }
+            }
+
+            .q--input {
+                width: 30px;
+                -moz-appearance: textfield;
+                text-align: center;
+                border-left: 0;
+                border-right: 0;
+
+                &::-webkit-inner-spin-button,
+                &::-webkit-outer-spin-button {
+                    -webkit-appearance: none;
+                }
+            }
+        }
+    }
+}
+
+// special question style
+.q- {
+    &rating {
+    }
+
+    &rating-star,
+    &rating-energy,
+    &rating-heart {
+        .q--btn {
+            &, &:focus, &.active {
+                background: transparent;
+            }
+        }
+
+        svg {
+            fill: $primary-color;
+        }
+    }
+
+    &number {
+        display: flex;
+        margin: 4px 0;
+        max-width: 450px;
+
+        label {
+            margin: auto auto auto 0;
+        }
+    }
+
+    &string {
+        display: flex;
+        margin: 4px 0;
+        max-width: 450px;
+
+        label {
+            margin: auto auto auto 0;
+        }
+    }
+}
+
+
+.flex {
+    display: flex
+}
+
+.flex-column {
+    flex-direction: column
+}
+
+.flex-wrap {
+    flex-wrap: wrap
+}
+
+.items-start {
+    align-items: flex-start
+}
+
+.items-end {
+    align-items: flex-end
+}
+
+.items-center {
+    align-items: center
+}
+
+.items-baseline {
+    align-items: baseline
+}
+
+.items-stretch {
+    align-items: stretch
+}
+
+.self-start {
+    align-self: flex-start
+}
+
+.self-end {
+    align-self: flex-end
+}
+
+.self-center {
+    align-self: center
+}
+
+.self-baseline {
+    align-self: baseline
+}
+
+.self-stretch {
+    align-self: stretch
+}
+
+.justify-start {
+    justify-content: flex-start
+}
+
+.justify-end {
+    justify-content: flex-end
+}
+
+.justify-center {
+    justify-content: center
+}
+
+.justify-between {
+    justify-content: space-between
+}
+
+.justify-around {
+    justify-content: space-around
+}
+
+.justify-evenly {
+    justify-content: space-evenly
+}
+
+.content-start {
+    align-content: flex-start
+}
+
+.content-end {
+    align-content: flex-end
+}
+
+.content-center {
+    align-content: center
+}
+
+.content-between {
+    align-content: space-between
+}
+
+.content-around {
+    align-content: space-around
+}
+
+.content-stretch {
+    align-content: stretch
+}
+
+/* 1. Fix for Chrome 44 bug. https://code.google.com/p/chromium/issues/detail?id=506893 */
+.flex-auto {
+    flex: 1 1 auto;
+    min-width: 0; /* 1 */
+    min-height: 0; /* 1 */
+}
+
+.flex-none {
+    flex: none
+}
+
+.order-0 {
+    order: 0
+}
+
+.order-1 {
+    order: 1
+}
+
+.order-2 {
+    order: 2
+}
+
+.order-3 {
+    order: 3
+}
+
+.order-last {
+    order: 99999
+}

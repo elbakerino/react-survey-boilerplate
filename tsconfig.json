@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "module": "esnext",
+        "target": "es6",
+        "jsx": "preserve",
+        "moduleResolution": "node",
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noEmit": true,
+        "experimentalDecorators": true,
+        "baseUrl": "./",
+        "allowSyntheticDefaultImports": true,
+        "noErrorTruncation": true,
+        "allowJs": true
+    },
+    "exclude": [
+        "**/build/"
+    ]
+}

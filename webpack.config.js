@@ -1,5 +1,6 @@
 'use strict';
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ExtractCssChunksPlugin = require('extract-css-chunks-webpack-plugin')
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const merge = require('webpack-merge');
@@ -7,10 +8,51 @@ const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
+const extractCss = true;
+
+const babelPresets = [
+    '@babel/preset-env',
+    '@babel/preset-react',
+    '@babel/preset-typescript',
+];
+
+const babelPlugins = [
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-transform-react-jsx",
+    "@babel/plugin-transform-template-literals",
+    "@babel/plugin-proposal-export-namespace-from",
+    "@babel/plugin-proposal-export-default-from",
+    "@babel/plugin-transform-runtime",
+    "transform-es2015-template-literals",
+    "es6-promise",
+    [
+        require.resolve('babel-plugin-named-asset-import'),
+        {
+            loaderMap: {
+                svg: {
+                    ReactComponent:
+                        '@svgr/webpack?-svgo,+titleProp,+ref![path]',
+                },
+            },
+        },
+    ],
+    '@babel/plugin-proposal-object-rest-spread',
+    '@babel/plugin-proposal-class-properties',
+];
 
 module.exports = merge({
         entry: {
             main: path.resolve(__dirname, 'src/index.tsx'),
+            // todo: if vendors are enabled, they still remain in `main`
+            //vendors: ['react', 'react-dom'],
+        },
+        output: {
+            filename: 'assets/[name].js',
+            //filename: 'assets/[name].[hash:8].js',
+            path: path.resolve(__dirname, 'dist'),
+            chunkFilename: 'assets/[name].js',
+            //chunkFilename: 'assets/[name].chunk.[hash:8].js',
+            futureEmitAssets: true,
         },
         resolve: {
             extensions: ['.js', '.tsx']
@@ -40,34 +82,8 @@ module.exports = merge({
                     use: [{
                         loader: "babel-loader",
                         options: {
-                            presets: [
-                                '@babel/preset-env',
-                                '@babel/preset-react',
-                                '@babel/preset-typescript',
-                            ],
-                            plugins: [
-                                "@babel/plugin-syntax-dynamic-import",
-                                "@babel/plugin-transform-react-jsx",
-                                "@babel/plugin-transform-template-literals",
-                                "@babel/plugin-proposal-export-namespace-from",
-                                "@babel/plugin-proposal-export-default-from",
-                                "@babel/plugin-transform-runtime",
-                                "transform-es2015-template-literals",
-                                "es6-promise",
-                                [
-                                    require.resolve('babel-plugin-named-asset-import'),
-                                    {
-                                        loaderMap: {
-                                            svg: {
-                                                ReactComponent:
-                                                    '@svgr/webpack?-svgo,+titleProp,+ref![path]',
-                                            },
-                                        },
-                                    },
-                                ],
-                                '@babel/plugin-proposal-object-rest-spread',
-                                '@babel/plugin-proposal-class-properties',
-                            ],
+                            presets: babelPresets,
+                            plugins: babelPlugins,
                             // This is a feature of `babel-loader` for webpack (not Babel itself).
                             // It enables caching results in ./node_modules/.cache/babel-loader/
                             // directory for faster rebuilds.
@@ -122,19 +138,37 @@ module.exports = merge({
                 }, {
                     test: /\.css$/i,
                     exclude: [/node_modules/],
-                    loader: 'style-loader!css-loader'
+                    loader: extractCss ? {
+                        loader: ExtractCssChunksPlugin.loader,
+                        options: {
+                            hot: !isProd,
+                            reloadAll: !isProd
+                        }
+                    } : 'style-loader!css-loader'
                 }, {
                     test: /\.css$/i,
                     include: [/node_modules/],
                     use: [
-                        {loader: 'style-loader', options: {injectType: 'lazySingletonStyleTag'}},
+                        extractCss ? {
+                            loader: ExtractCssChunksPlugin.loader,
+                            options: {
+                                hot: !isProd,
+                                reloadAll: !isProd
+                            }
+                        } : {loader: 'style-loader', options: {injectType: 'lazySingletonStyleTag'}},
                         'css-loader',
                     ],
                 }, {
                     test: /\.s[ac]ss$/i,
                     exclude: [/node_modules/],
                     use: [
-                        'style-loader',
+                        extractCss ? {
+                            loader: ExtractCssChunksPlugin.loader,
+                            options: {
+                                hot: !isProd,
+                                reloadAll: !isProd
+                            }
+                        } : 'style-loader',
                         'css-loader',
                         'sass-loader',
                     ],
@@ -142,6 +176,19 @@ module.exports = merge({
             ],
         },
         optimization: {
+            runtimeChunk: false,
+            splitChunks: {
+                //chunks: 'all',
+                name: true,
+                /*cacheGroups: {
+                    default: false,
+                    vendors: false,
+                    vendor: {
+                        chunks: 'all',
+                        test: /node_modules/
+                    }
+                }*/
+            },
             minimize: isProd,
             minimizer: [new TerserPlugin({
                 terserOptions: {
@@ -193,19 +240,40 @@ module.exports = merge({
                 sourceMap: true,
             })],
         },
+        plugins: [
+            new ExtractCssChunksPlugin({
+                // filename: isProd ? 'css/[name].[contenthash:8].css' : '[name].css',
+                // chunkFilename: isProd ? 'css/[name].[contenthash:8].chunk.css' : '[name].chunk.css'
+            }),
+            new HtmlWebpackPlugin(
+                Object.assign(
+                    {},
+                    {
+                        inject: true,
+                        template: path.resolve(__dirname, 'public', 'index.html'),
+                    },
+                    process.env.NODE_ENV === 'production' ? {
+                            minify: {
+                                removeComments: true,
+                                collapseWhitespace: true,
+                                removeRedundantAttributes: true,
+                                useShortDoctype: true,
+                                removeEmptyAttributes: true,
+                                removeStyleLinkTypeAttributes: true,
+                                keepClosingSlash: true,
+                                minifyJS: true,
+                                minifyCSS: true,
+                                minifyURLs: true,
+                            },
+                        }
+                        : undefined
+                )
+            ),
+
+            // doesnt work with v4 of HtmlWebpackPlugin, but we need HtmlWebpackPlugin for the code splitting it seems
+            //new InterpolateHtmlPlugin(HtmlWebpackPlugin, buildEnv(paths.demo.servedPath).raw),
+        ],
     }, {
-        entry: {
-            // todo: if vendors are enabled, they still remain in `main`
-            //vendors: ['react', 'react-dom'],
-        },
-        output: {
-            filename: 'assets/[name].js',
-            //filename: 'assets/[name].[hash:8].js',
-            path: path.resolve(__dirname, 'dist'),
-            chunkFilename: 'assets/[name].js',
-            //chunkFilename: 'assets/[name].chunk.[hash:8].js',
-            futureEmitAssets: true,
-        },
         performance: {
             hints: false,
         },
@@ -249,50 +317,6 @@ module.exports = merge({
                 },
             },],
         },
-        optimization: {
-            runtimeChunk: false,
-            splitChunks: {
-                //chunks: 'all',
-                name: true,
-                /*cacheGroups: {
-                    default: false,
-                    vendors: false,
-                    vendor: {
-                        chunks: 'all',
-                        test: /node_modules/
-                    }
-                }*/
-            },
-        },
-        plugins: [
-            new HtmlWebpackPlugin(
-                Object.assign(
-                    {},
-                    {
-                        inject: true,
-                        template: path.resolve(__dirname, 'public', 'index.html'),
-                    },
-                    process.env.NODE_ENV === 'production' ? {
-                            minify: {
-                                removeComments: true,
-                                collapseWhitespace: true,
-                                removeRedundantAttributes: true,
-                                useShortDoctype: true,
-                                removeEmptyAttributes: true,
-                                removeStyleLinkTypeAttributes: true,
-                                keepClosingSlash: true,
-                                minifyJS: true,
-                                minifyCSS: true,
-                                minifyURLs: true,
-                            },
-                        }
-                        : undefined
-                )
-            ),
-
-            // doesnt work with v4 of HtmlWebpackPlugin, but we need HtmlWebpackPlugin for the code splitting it seems
-            //new InterpolateHtmlPlugin(HtmlWebpackPlugin, buildEnv(paths.demo.servedPath).raw),
-        ],
     },
     isProd ? {
         mode: 'production',

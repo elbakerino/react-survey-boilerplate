@@ -68,6 +68,7 @@ thead {
 
         &-number {
             display: flex;
+            position: relative;
             //width: 100%;
 
             &--control {
@@ -103,6 +104,16 @@ thead {
                 &--increase {
                     border-left: 0;
                 }
+            }
+
+            &--more-then {
+                color: $primary-color;
+                font-size: 1em;
+                position: absolute;
+                top: 50%;
+                right: calc(24px + 9px + 9px + 5px);
+                transform: translateY(-50%);
+                pointer-events: none;
             }
 
             .q--input {

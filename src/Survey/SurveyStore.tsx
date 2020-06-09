@@ -37,15 +37,19 @@ export type SurveyStore = RecordOf<SurveyStoreProps>;
 
 export interface SurveyProviderProps {
     store: SurveyStore;
+    types: { [key: string]: React.ElementType; };
     questions: QuestionProps[];
 }
 
-const SurveyContext: React.Context<SurveyProviderProps> = React.createContext({store: new SurveyStore({}), questions: []});
+const SurveyContext: React.Context<SurveyProviderProps> = React.createContext({
+    store: new SurveyStore({}),
+    questions: []
+});
 
 export const SurveyProvider = (
-    {children, store, questions}
+    {children, store, types, questions}
         : React.PropsWithChildren<SurveyProviderProps>
-) => <SurveyContext.Provider value={{store, questions}} children={children}/>;
+) => <SurveyContext.Provider value={{store, questions, types}} children={children}/>;
 
 export const createSurvey = (values: Function | OrderedMap<any, any>) => {
     const [survey, onChange] = React.useState(() => new SurveyStore({

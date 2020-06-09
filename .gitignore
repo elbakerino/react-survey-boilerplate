@@ -1,3 +1,5 @@
+/dist
+
 # env variables
 .env
 .npmrc

@@ -1,6 +1,5 @@
 import React from "react";
-import { TableQuestion } from "./SurveyTableQuestion";
-import { SurveyProvider, SurveyProps } from "../Survey";
+import { SurveyProvider, SurveyProps, QuestionRenderer } from "../Survey";
 import { H } from "../components/Headline";
 
 export interface SurveyTableProps extends SurveyProps {
@@ -14,9 +13,10 @@ export const SurveyTable = (
         questions,
         questionHeader,
         store,
+        types,
         children
     }: React.PropsWithChildren<SurveyTableProps>
-) => (<SurveyProvider store={store}>
+) => (<SurveyProvider store={store} questions={questions} types={types}>
     {title ? <H level={titleLevel}>
         {title}
     </H> : null}
@@ -27,7 +27,7 @@ export const SurveyTable = (
         </tr>
         </thead>
         <tbody>
-        {questions.map(question => <TableQuestion key={question.id} {...question}/>)}
+        {questions.map(question => <QuestionRenderer key={question.id} {...question}/>)}
         </tbody>
     </table>
     {children}

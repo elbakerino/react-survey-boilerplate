@@ -8,7 +8,16 @@ import { SurveyTable, SurveyTableProps } from "./SurveyTable";
 import { OrderedMap } from "immutable";
 
 import './style.scss';
-import { SurveyGen, SurveyGenDefinition, SurveyGenProps } from "./SurveyGen";
+import {
+    HandlerNumber,
+    HandlerRating, HandlerRatingEmoji,
+    HandlerRatingHeart,
+    HandlerRatingStar, HandlerString, HandlerText, QuestionTypesDefinition,
+    SurveyGen,
+    SurveyGenDefinition,
+    SurveyGenProps
+} from "./SurveyGen";
+import { HandlerYesNo } from "./SurveyTable/HandlerYesNo";
 
 const structureSurveyTable = {
     title: 'Dummy Title Overwritten by JSON Props',
@@ -20,16 +29,29 @@ const structureSurveyTable = {
     questions: [
         {
             id: 'table_q_1',
-            label: 'Is that good?'
+            label: 'Is that good?',
+            type: 'yes_no',
         }, {
             id: 'table_q_2',
-            label: 'You like this?'
+            label: 'You like this?',
+            type: 'yes_no',
         }, {
             id: 'table_q_3',
-            label: 'Any more of those?'
+            label: 'Any more of those?',
+            type: 'yes_no',
         }, {
             id: 'table_q_4',
-            label: 'That looks nice, doesn\'t it?'
+            label: 'That looks nice, doesn\'t it?',
+            type: 'yes_no',
+        }, {
+            id: 'table_q_5',
+            label: 'Your preferred Way?',
+            enum: [],
+            type: 'radio',
+        }, {
+            id: 'table_q_6',
+            label: 'Accept it?',
+            type: 'check',
         }
     ]
 };
@@ -73,6 +95,8 @@ const structureSurveyGen: SurveyGenDefinition = {
             id: 'fav_num_select',
             label: 'How much do you do?',
             type: 'number',
+            max: 5,
+            showMoreThen: true,
             result: {}
         }, {
             id: 'fav_num_select2',
@@ -93,16 +117,37 @@ const structureSurveyGen: SurveyGenDefinition = {
     ]
 };
 
+const questionTypesTable: QuestionTypesDefinition = {
+    yes_no: HandlerYesNo,
+    radio: () => null,
+    check: () => null,
+};
+
 const CustomSurveyTable = (props: SurveyTableProps) => {
     const store = createSurvey(OrderedMap({}));
-    return <SurveyTable {...structureSurveyTable} {...props} store={store}>
+    return <SurveyTable {...structureSurveyTable} {...props} store={store} types={questionTypesTable}>
         <SurveyStats questions={structureSurveyTable.questions}/>
     </SurveyTable>;
 };
 
+const questionTypes: QuestionTypesDefinition = {
+    rating: HandlerRating,
+    rating_heart: HandlerRatingHeart,
+    rating_star: HandlerRatingStar,
+    rating_emoji: HandlerRatingEmoji,
+    number: HandlerNumber,
+    string: HandlerString,
+    text: HandlerText,
+    check: () => null,
+    radio: () => null,
+    select: () => null,
+    chips: () => null,
+    date: () => null,
+};
+
 const CustomSurvey = (props: SurveyGenProps) => {
     const store = createSurvey(OrderedMap({}));
-    return <SurveyGen {...props} {...structureSurveyGen} store={store}/>;
+    return <SurveyGen {...props} {...structureSurveyGen} store={store} types={questionTypes}/>;
 };
 
 const App = () => {

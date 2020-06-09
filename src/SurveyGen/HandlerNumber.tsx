@@ -7,12 +7,14 @@ import { IcAdd } from "../icons/IcAdd";
 
 export interface DefinitionNumber extends QuestionGenProps {
     min?: number;
-    count?: number;
+    max?: number;
+    showMoreThen?: boolean;
 }
 
-export const HandlerNumber = ({id, label, min = 0, count}: DefinitionNumber) => {
+export const HandlerNumber = ({id, label, min = 0, max, showMoreThen}: DefinitionNumber) => {
     const {store} = useSurvey();
-
+    const doMoreThen = showMoreThen && typeof max !== 'undefined';
+    const isMoreThen = doMoreThen && store.getValue(id) === max;
     return <div className={clsx('q-number', 'flex')}>
         <label className={'q--label'}>
             {label}
@@ -26,18 +28,20 @@ export const HandlerNumber = ({id, label, min = 0, count}: DefinitionNumber) => 
                 }
             ><IcRemove/></button>
             <input
-                className={clsx('q--input')}
+                className={clsx('q--input', isMoreThen && 'more-then')}
                 type={'number'}
                 min={min}
-                count={count}
+                max={max}
                 onChange={(e) => store.onChange(id, parseInt(e.target.value, 10))}
                 value={store.getValue(id) || 0}
             />
+            {isMoreThen ? <span className={'q--input-number--more-then'}>+</span> : null}
             <button
                 type={'button'}
                 className={clsx('q--input-number--control', 'q--input-number--control--increase')}
+                disabled={isMoreThen}
                 onClick={() =>
-                    typeof count === 'undefined' || (store.getValue(id) || 0) < count ? store.onChange(id, (store.getValue(id) || 0) + 1) : null
+                    typeof max === 'undefined' || (store.getValue(id) || 0) < max ? store.onChange(id, (store.getValue(id) || 0) + 1) : null
                 }
             ><IcAdd/></button>
         </div>

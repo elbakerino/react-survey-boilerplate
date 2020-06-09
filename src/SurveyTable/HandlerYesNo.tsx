@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import { useSurvey, QuestionProps } from "../Survey";
 
-export const TableQuestion = ({id, label}: QuestionProps) => {
+export const HandlerYesNo = ({id, label}: QuestionProps) => {
     const {store} = useSurvey();
 
     return <tr className={'q--row'}>

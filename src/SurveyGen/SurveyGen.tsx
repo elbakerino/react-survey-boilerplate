@@ -1,53 +1,10 @@
 import React from "react";
 import clsx from "clsx";
-import AnimateHeight from 'react-animate-height';
+import AnimateHeight from "react-animate-height";
 import { QuestionGenProps } from "./SurveyGenQuestion";
-import { SurveyProvider, SurveyProps, SurveyDefinition, useSurvey } from "../Survey";
+import { SurveyProvider, SurveyProps, SurveyDefinition, useSurvey, QuestionRenderer } from "../Survey";
 import { H } from "../components/Headline";
-import { DefinitionRating, HandlerRating } from "./HandlerRating";
-import { HandlerNumber } from "./HandlerNumber";
-import { HandlerString, HandlerText } from "./HandlerString";
-import { HandlerRatingHeart } from "./HandlerRatingHeart";
-import { HandlerRatingStar } from "./HandlerRatingStar";
-import { HandlerRatingEmoji } from "./HandlerRatingEmoji";
-
-interface QuestionTypesDefinition {
-    [key: string]: React.ElementType;
-}
-
-const questionTypes: QuestionTypesDefinition = {
-    rating: HandlerRating,
-    rating_heart: HandlerRatingHeart,
-    rating_star: HandlerRatingStar,
-    rating_emoji: HandlerRatingEmoji,
-    number: HandlerNumber,
-    string: HandlerString,
-    text: HandlerText,
-    select: () => null,
-    chips: () => null,
-    date: () => null,
-};
-
-const QuestionRenderer = ({type, showIf, ...props}: QuestionGenProps): React.ReactElement | string => {
-    const QuestionHandler = questionTypes[type];
-    const {store} = useSurvey();
-    let show = true;
-    if (showIf) {
-        for (const id of Object.keys(showIf)) {
-            if (!showIf[id](store.getValue(id))) {
-                show = false;
-            }
-        }
-    }
-    return questionTypes[type] ?
-        <AnimateHeight
-            duration={showIf ? 450 : 0}
-            height={showIf ? show ? 'auto' : 0 : 'auto'}
-        >
-            <QuestionHandler {...props} type={type}/>
-        </AnimateHeight>
-        : 'no-handler';
-};
+import { DefinitionRating } from "./HandlerRating";
 
 export interface SurveyGenDefinition extends SurveyDefinition {
     questions: QuestionGenProps[] | DefinitionRating[];
@@ -57,10 +14,16 @@ export interface SurveyGenProps extends SurveyProps {
     questions: QuestionGenProps[] | DefinitionRating[];
 }
 
+const QuestionWrapper = ({showIf, show, children}) => <AnimateHeight
+    duration={showIf ? 450 : 0}
+    height={showIf ? show ? 'auto' : 0 : 'auto'}
+    children={children}
+/>;
+
 export const SurveyGenBody = () => {
     const {questions} = useSurvey();
     return <div className={clsx('flex', 'flex-column')}>
-        {questions.map(question => <QuestionRenderer key={question.id} {...question}/>)}
+        {questions.map(question => <QuestionRenderer key={question.id} {...question} Wrapper={QuestionWrapper}/>)}
     </div>;
 };
 
@@ -69,10 +32,11 @@ export const SurveyGen = (
         title,
         titleLevel,
         questions,
+        types,
         store,
         children
     }: React.PropsWithChildren<SurveyGenProps>
-) => (<SurveyProvider store={store} questions={questions}>
+) => (<SurveyProvider store={store} questions={questions} types={types}>
     {title ? <H level={titleLevel}>{title}</H> : null}
     <SurveyGenBody/>
     {children}

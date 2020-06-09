@@ -9,5 +9,6 @@ export interface SurveyDefinition {
 
 export interface SurveyProps extends SurveyDefinition {
     store: SurveyStore;
+    types: {};
     questions: QuestionProps[];
 }

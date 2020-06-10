@@ -1,9 +1,8 @@
 import React from "react";
 import clsx from "clsx";
-import { useSurvey } from "../Survey";
-import { QuestionGenProps } from "./SurveyGenQuestion";
+import { useSurvey, QuestionProps } from "../Survey";
 
-export interface DefinitionRating extends QuestionGenProps {
+export interface DefinitionRating extends QuestionProps {
     min: number;
     count: number;
 }

@@ -1,10 +1,9 @@
 import React from "react";
 import clsx from "clsx";
-import { useSurvey } from "../Survey";
-import { QuestionGenProps } from "./SurveyGenQuestion";
+import { useSurvey, QuestionProps } from "../Survey";
 
 // tslint:disable-next-line:no-empty-interface
-export interface DefinitionString extends QuestionGenProps {
+export interface DefinitionString extends QuestionProps {
 }
 
 export interface HandlerStringProps {

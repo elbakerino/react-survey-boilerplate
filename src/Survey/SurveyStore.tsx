@@ -24,7 +24,7 @@ const defaultSurveyStore: SurveyStoreProps = {
             this.onChangeHandler(prevStore =>
                 prevStore.setIn(
                     ['values', id],
-                    value
+                    typeof value === 'function' ? value(prevStore.getValue(id)) : value
                 )
             );
         });
@@ -51,7 +51,7 @@ export const SurveyProvider = (
         : React.PropsWithChildren<SurveyProviderProps>
 ) => <SurveyContext.Provider value={{store, questions, types}} children={children}/>;
 
-export const createSurvey = (values: Function | OrderedMap<any, any>) => {
+export const createSurvey = (values: Function | OrderedMap<any, any>): SurveyStore => {
     const [survey, onChange] = React.useState(() => new SurveyStore({
         values: typeof values === 'function' ? values() : values,
     }));

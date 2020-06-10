@@ -70,6 +70,7 @@
         "react-animate-height": "^2.0.21",
         "react-dev-utils": "^10.2.1",
         "react-dom": "^16.13.1",
+        "react-uid": "^2.3.0",
         "rimraf": "^3.0.2",
         "sass-loader": "^8.0.2",
         "scheduler": "^0.19.1",

@@ -21,6 +21,7 @@ thead {
     }
 }
 
+
 .q-- {
     &label {
         padding: 0 6px;
@@ -56,6 +57,7 @@ thead {
         border: 1px solid $border-color;
         background: transparent;
         padding: 6px;
+        font-family: sans-serif;
         //width: 38px;
         //height: 38px;
         color: $primary-color;
@@ -170,8 +172,95 @@ thead {
             margin: auto auto auto 0;
         }
     }
+
+    &check,
+    &radio {
+        border: 1px solid $border-color;
+        margin: 12px 0;
+        box-sizing: border-box;
+        max-width: 450px;
+
+        &--input {
+            margin: 4px 0;
+        }
+
+        svg {
+            fill: $primary-color;
+        }
+    }
+
+    &table-radio {
+
+        &--label {
+            padding: 9px 6px;
+            display: block;
+        }
+
+        > td {
+            font-family: sans-serif;
+        }
+
+        table {
+            tr {
+                td {
+                    &:first-child {
+                        width: 38px / 2 * 1;
+                        border-right: 0;
+                    }
+
+                    &:nth-child(2) {
+                        border-left: 0;
+                    }
+
+                    &:last-child {
+                        width: 38px * 2;
+
+                        .ic-label {
+                            display: flex;
+                            text-align: center;
+                            width: 38px * 2;
+                            height: 38px;
+
+                            font-size: 1rem;
+                            cursor: pointer;
+                            transition: background-color 0.3s linear;
+                            justify-content: center;
+
+                            &:hover {
+                                background: rgba($primary-color, 0.1);
+                            }
+
+                            &:focus {
+                                background: rgba($primary-color, 0.2);
+                            }
+                        }
+
+                        svg {
+                            fill: $primary-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
+.ic-label {
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+
+    &.focused svg {
+        filter: brightness(50%);
+    }
+}
 
 .flex {
     display: flex

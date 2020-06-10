@@ -1,11 +1,10 @@
 import React from "react";
 import clsx from "clsx";
-import { useSurvey } from "../Survey";
-import { QuestionGenProps } from "./SurveyGenQuestion";
+import { useSurvey, QuestionProps } from "../Survey";
 import { IcRemove } from "../icons/IcRemove";
 import { IcAdd } from "../icons/IcAdd";
 
-export interface DefinitionNumber extends QuestionGenProps {
+export interface DefinitionNumber extends QuestionProps {
     min?: number;
     max?: number;
     showMoreThen?: boolean;

@@ -1,5 +1,7 @@
 export * from './SurveyGen';
 export * from './SurveyGenQuestion';
+export * from './HandlerCheck';
+export * from './HandlerRadio';
 export * from './HandlerRating';
 export * from './HandlerRatingEmoji';
 export * from './HandlerRatingHeart';

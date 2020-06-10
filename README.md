@@ -1,32 +1,49 @@
 # React Survey Boilerplate
 
-Typescript+React boilerplate for custom surveys with either a simple table based survey or complex any-question surveys.
+Boilerplate for custom surveys in React and Typescript with either a simple table based survey or complex any-question surveys.
 
-## Usage with Portals
+<details>
+<summary>**Show Example**</summary>
+![React Survey Example](https://github.com/elbakerino/react-survey-boilerplate/blob/master/example.jpg?raw=true)
+</details>
 
-## Usage in CRA
+## Scripts
+
+    npm i
+    npm start
+    # open: localhost:4044
+    
+    npm run build
+    npm serve
+    # open: localhost:4046
+    
+To use in own libraries install dependencies and copy the src folder into your project:
+
+    npm i --save clsx immutable react-uid
+    # only used in SurveyGen:
+    npm i --save react-animate-height
 
 ## Components
 
 ### Survey Basics
 
-The files in [src/Survey](./src/Survey) are the base files for the rendering and storing the questions and answers.
+The files in [src/Survey](./src/Survey) are the base files for rendering and storing the questions and answers.
 
 #### SurveyStore
 
-- `createSurvey()`, creates the immutable record `SurveyStore`, which holds the state and state updater
--  `SurveyProvider` with props
+- `createSurvey()` creates the immutable record `SurveyStore`
+- `SurveyStore` holds the state and state updater/answers
+- `SurveyProvider` with props:
     - `store: SurveyStore` the returned value of `createSurvey()`   
         - `store.values` the immutable [OrderedMap](https://immutable-js.github.io/immutable-js/docs/#/OrderedMap/OrderedMap) which stores the answers
         - `store.values.toJS()` to convert back to JS-object
         - Note: if your app requires high performance, you may need to avoid toJS()
-        - `store.onChange(id, value)` to update with an hard coded value
+        - `store.onChange(id, value)` to update with a hard coded value
         - `store.onChange(id, oldvalue => { return newvalue })` to get the old value from the onchange handler (recommended)
         - `store.getValue(id)` to get the value of a single answer
     - `types: {}`, the types available for questions
     - `questions: []`, all questions for this survey
 - `useSurvey()` hook to get the store, types and questions
-- and typings
 
 #### SurveyQuestion
 
@@ -39,6 +56,8 @@ The files in [src/Survey](./src/Survey) are the base files for the rendering and
 #### Implementing Custom Survey
 
 Two ready-to-use survey implementations are included in the boilerplate: [SurveyGen](#survey-generator-surveygen) and [SurveyTable](#survey-table). They handle/show the survey in different ways and support different question types through multiple question handler.
+
+With the base components you can create any own handler, take a look in [src/SurveyGen/SurveyGen](./src/SurveyGen/SurveyGen.tsx) and [src/SurveyTable/SurveyTable](./src/SurveyTable/SurveyTable.tsx) for how this can be done.
 
 ### Question Handler
 
@@ -95,8 +114,11 @@ See [src/DemoGen.tsx](./src/DemoGen.tsx) for a basic question schema and basic s
         - `count: number` how many numbers can be rated 
 - `HandlerString`
     - additional properties
-        - `multiline` will render an `textarea`
+        - `multiline` will render a `textarea`
 
+## Usage with Portals
+
+## Usage in CRA
 
 ## License
 

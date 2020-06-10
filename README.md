@@ -3,8 +3,8 @@
 Boilerplate for custom surveys in React and Typescript with either a simple table based survey or complex any-question surveys.
 
 <details>
-<summary>**Show Example**</summary>
-![React Survey Example](https://github.com/elbakerino/react-survey-boilerplate/blob/master/example.jpg?raw=true)
+<summary>Show Example</summary>
+<img src="https://raw.githubusercontent.com/elbakerino/react-survey-boilerplate/master/example.jpg" alt="React Survey Example">
 </details>
 
 ## Scripts
@@ -25,9 +25,16 @@ To use in own libraries install dependencies and copy the src folder into your p
 
 ## Components
 
-### Survey Basics
+Get started by checking out SurveyGen and SurveyTable, also easy with starting the repo.
 
-The files in [src/Survey](./src/Survey) are the base files for rendering and storing the questions and answers.
+- [Survey Base](#survey-base), used in the implementations
+- [Question Handler](#question-handler), basic question definition
+- [SurveyGen](#survey-generator-surveygen), complex any-question survey
+- [SurveyTable](#survey-table), survey in a table 
+
+### Survey Base
+
+The files in [src/Survey](./src/Survey) are the base files for rendering and storing the questions and answers. Used in the actual survey implementations.
 
 #### SurveyStore
 
